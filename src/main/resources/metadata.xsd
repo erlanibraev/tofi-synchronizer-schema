@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<xs:schema targetNamespace="http://www.factor.kz/resources/TOFISchema/metadata" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.factor.kz/resources/TOFISchema/metadata"
+           xmlns:st="http://www.factor.kz/resources/TOFISchema/simpletype"
+           xmlns:ct="http://www.factor.kz/resources/TOFISchema/complextype"
+>
+    <xs:import namespace="http://www.factor.kz/resources/TOFISchema/simpletype" schemaLocation="simpletype.xsd"/>
+    <xs:import namespace="http://www.factor.kz/resources/TOFISchema/complextype" schemaLocation="complextype.xsd"/>
+
+    <xs:complexType name="MetadataType">
+        <xs:annotation>
+            <xs:documentation>Тип описывающий метаданные.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="MetadataVersion" type="ct:VersionType">
+                <xs:annotation>
+                    <xs:documentation>Версия метаданных и данных</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="MetadataVersionPrevious" type="ct:VersionType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Разница с любой предыдущей версией метаданных и данных</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="MetadataUpdate" type="MetadataUpdateType">
+                <xs:annotation>
+                    <xs:documentation>Информация об обновлении метаданных и данных</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="CodingSystems" type="ct:CodingSystemsType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Система кодирования</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Measures" type="ct:MeasuresType">
+                <xs:annotation>
+                    <xs:documentation>Единицы измерения</xs:documentation>
+                </xs:annotation>
+                <xs:keyref name="idMeasureKeyRef" refer="idMeasureKey">
+                    <xs:selector xpath="Measures_base/*"/>
+                    <xs:field xpath="@Id"/>
+                </xs:keyref>
+                <xs:key name="idMeasureKey">
+                    <xs:selector xpath=".//Measures_derivative"/>
+                    <xs:field xpath="@Parent"/>
+                </xs:key>
+            </xs:element>
+            <xs:element name="Factors" type="ct:FactorsType">
+                <xs:annotation>
+                    <xs:documentation>Факторы</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Meters" type="ct:MetersType">
+                <xs:annotation>
+                    <xs:documentation>Измерители.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="OwnerContainers" type="ct:OwnerContainersType">
+                <xs:annotation>
+                    <xs:documentation>Контейнеры владельцев данных.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Owners" type="ct:OwnersType">
+                <xs:annotation>
+                    <xs:documentation>Владельцы данных.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="PropertiesContainer" type="ct:PropertiesContainerType">
+                <xs:annotation>
+                    <xs:documentation>Контейнеры свойств.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Properties" type="ct:PropertiesType">
+                <xs:annotation>
+                    <xs:documentation>Свойства</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="OwnerContainerProperties" type="ct:OwnerContainerPropertiesType">
+                <xs:annotation>
+                    <xs:documentation>Характеристические свойства владельца</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="LatestVersion" type="st:LatestVersionType" use="required">
+            <xs:annotation>
+                <xs:documentation>Признак последней версии</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="MetadataUpdateType">
+        <xs:sequence>
+            <xs:element name="MetaFormation" type="st:ValidateDate">
+                <xs:annotation>
+                    <xs:documentation>Дата формирование метаданных и данных</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="MetaLastUpdate" type="st:ValidateDate">
+                <xs:annotation>
+                    <xs:documentation>Дата последнего обновления содержания метаданных и данных.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

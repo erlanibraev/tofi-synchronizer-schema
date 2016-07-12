@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<xs:schema targetNamespace="http://www.factor.kz/resources/TOFISchema" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.factor.kz/resources/TOFISchema"
+           xmlns:st="http://www.factor.kz/resources/TOFISchema/simpletype"
+           xmlns:ct="http://www.factor.kz/resources/TOFISchema/complextype"
+           xmlns:dt="http://www.factor.kz/resources/TOFISchema/data"
+           xmlns:md="http://www.factor.kz/resources/TOFISchema/metadata"
+>
+    <xs:import namespace="http://www.factor.kz/resources/TOFISchema/simpletype" schemaLocation="simpletype.xsd"/>
+    <xs:import namespace="http://www.factor.kz/resources/TOFISchema/complextype" schemaLocation="complextype.xsd"/>
+    <xs:import namespace="http://www.factor.kz/resources/TOFISchema/data" schemaLocation="data.xsd"/>
+    <xs:import namespace="http://www.factor.kz/resources/TOFISchema/metadata" schemaLocation="metadata.xsd"/>
+
+
+    <xs:element name="message" type="MessageType"/>
+
+    <xs:element name="MessageRequest">
+        <xs:annotation>
+            <xs:documentation>Для отправки сообщения.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="message"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="MessageResponse">
+        <xs:annotation>
+            <xs:documentation>Для получения сообщения.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="message"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="MessageType">
+        <xs:annotation>
+            <xs:documentation>Абстрактный тип, описывающий структуру произвольного сообщения.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="Header" type="HeaderType"/>
+            <xs:choice>
+                <xs:element ref="dt:data"/>
+                <xs:element name="metadata" type="md:MetadataType"/>
+            </xs:choice>
+            <xs:element name="Footer" type="FooterType" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="HeaderType">
+        <xs:annotation>
+            <xs:documentation>Заголовок сообщения.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="Id" type="xs:long"/>
+            <xs:element ref="ct:Name"/>
+            <xs:element name="Sender" type="ct:AgencyType">
+                <xs:annotation>
+                    <xs:documentation>Отправитель метаданных и данных</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Receivers" type="ct:Agencies">
+                <xs:annotation>
+                    <xs:documentation>Получатели метаданных и данных</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="MessageType" type="st:MessageTypeType"/>
+    </xs:complexType>
+
+    <xs:complexType name="FooterType">
+        <xs:sequence>
+            <xs:element name="Text" type="ct:TextType"/>
+        </xs:sequence>
+        <xs:attribute name="Severity" type="ct:SeverityCodeType"/>
+    </xs:complexType>
+
+</xs:schema>

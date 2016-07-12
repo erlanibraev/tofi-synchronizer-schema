@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<xs:schema targetNamespace="http://www.factor.kz/resources/TOFISchema/data" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.factor.kz/resources/TOFISchema/data"
+           xmlns:st="http://www.factor.kz/resources/TOFISchema/simpletype"
+>
+    <xs:import namespace="http://www.factor.kz/resources/TOFISchema/simpletype" schemaLocation="simpletype.xsd"/>
+
+    <xs:element name="data">
+        <xs:complexType>
+            <xs:sequence maxOccurs="unbounded">
+                <xs:element name="dataType" type="DataType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="DataType">
+        <xs:sequence maxOccurs="1">
+            <xs:element name="CodeOwner" type="EntityRef"/>
+            <xs:element name="CodeProperty" type="EntityRef"/>
+            <xs:element name="CodeStatus" type="EntityRef" minOccurs="0"/>
+            <xs:element name="CodeProvider" type="EntityRef" minOccurs="0"/>
+            <xs:element name="PeriodType" type="st:PeriodTypeType" minOccurs="0"/>
+            <xs:element name="DateBegin" type="st:ValidateDate" minOccurs="0"/>
+            <xs:element name="CodeMeasure" type="EntityRef" minOccurs="0"/>
+            <xs:choice>
+                <xs:element name="ValueId" type="EntityRef" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="ValueNum" type="xs:double" minOccurs="0"/>
+                <xs:element name="ValueDate" type="st:ValidateDate" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="ValueDateTime" type="xs:dateTime" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="ValueFile" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="ValueString" type="st:FileNameType" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="ValueBoolean" type="xs:boolean" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="ValueURI" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="EntityRef">
+        <xs:annotation>
+            <xs:documentation>Тип для описания ссылки на экземпляр любой сущности.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="csCode" type="st:CodeType">
+                <xs:annotation>
+                    <xs:documentation>Ссылка на код системы кодирования.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Code" type="st:CodeType">
+                <xs:annotation>
+                    <xs:documentation>Ссылка на код экземпляра сущности.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>
